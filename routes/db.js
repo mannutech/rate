@@ -17,6 +17,7 @@
 			}
 
 	  console.log('The solution is: ', rows);
+	  
 	  connection.end();
 });
 

@@ -12,8 +12,7 @@ var appRouter = function(app) {
 			else
 			{
 					req.body.SourceCurrency='USD';
-					Amount='1.00';
-					console.log(req.body);
+					req.body.Amount='1.00';
 					var dbsave = require("./db.js")(req.body);
 			}
 
