@@ -1,6 +1,6 @@
 
-var connectionFromRoutes = function(body){
-	var mysql      = require('mysql');
+	var connectionFromRoutes = function(body){
+		var mysql      = require('mysql');
 	var connection = mysql.createConnection({
 	  host     : 'localhost',
 	  user     : 'root',
