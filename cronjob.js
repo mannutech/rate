@@ -30,7 +30,7 @@
 
 function dbsave(currency_code,currency_value)
 {
-	var query = 'UPDATE currency SET mannu.currency.conversion_value ='+"'"+currency_value+"'" +' WHERE currency.currency_code='+"'"+currency_code+"'";
+	var query = 'UPDATE currency SET mannu.currency.conversion_value ='+"'"+currency_value+"'" +',currency.last_updated ='+new Date().getTime()+' WHERE currency.currency_code='+"'"+currency_code+"'";
 
 	// /connection.connect(function(err){ if (err) { console.log(err);}});
 		connection.query(query,[currency_value], function(err,rows) {
