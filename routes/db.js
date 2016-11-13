@@ -1,5 +1,5 @@
-
-	var connectionFromRoutes = function(body){
+module.exports ={
+db: function db(body, callback){
 		var mysql      = require('mysql');
 	var connection = mysql.createConnection({
 	  host     : 'localhost',
@@ -16,12 +16,12 @@
 				console.log(err);
 			}
 
-	  console.log('The solution is: ', rows);
+	  	  //console.log('The solution is: ', rows);
+          //added line
+          connection.end();
+          return callback(rows);  
 	  
-	  connection.end();
 });
 
 }
-
-
-module.exports = connectionFromRoutes;
+};

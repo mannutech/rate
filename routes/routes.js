@@ -1,4 +1,3 @@
-
 var appRouter = function(app) {
 
 	app.post("/api/v0/rate", function(req, res) {
@@ -13,7 +12,18 @@ var appRouter = function(app) {
 			{
 					req.body.SourceCurrency='USD';
 					req.body.Amount='1.00';
-					var dbsave = require("./db.js")(req.body);
+					var db = require("./db.js");
+					var result=[];
+					db.db(req.body,function callback(err,result){
+						if(err)
+						{
+							console.log(err);		
+						}
+                    console.log(result);
+                    
+                    //connection.end();
+                    }); 
+                                        //console.log(db.connectionFromRoutes);
 			}
 
 			    	
