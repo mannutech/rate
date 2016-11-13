@@ -7,8 +7,8 @@ db: function db(body, callback){
 	  password : 'phpmyadmin',
 	  database : 'mannu'
 	});
-
-	var query = 'SELECT * FROM mannu.currency WHERE currency.currency_code='+"'"+body.SourceCurrency+"'";
+	var SourceCurrency=body.SourceCurrency || 'USD';
+	var query = 'SELECT * FROM mannu.currency WHERE currency.currency_code='+"'"+SourceCurrency+"'";
 	console.log(query);
 	connection.connect(function(err){ if (err) { console.log(err);}});
 		connection.query(query, function(err,rows) {

@@ -1,6 +1,7 @@
 var appRouter = function(app) {
 
-	app.post("/api/v0/rate", function(req, res) {
+	var apicache = require('apicache').options({ debug: true }).middleware;
+	app.post("/api/v0/rate", apicache('10 seconds'),function(req, res) {
 
 		if (req.method=='POST') 
 		{
@@ -22,8 +23,9 @@ var appRouter = function(app) {
 
 			}
 			*/
-			if (req.body.SourceCurrency !='' && req.body.Amount !='') 
+			if (req.body.SourceCurrency !=='' && req.body.Amount !=='') 
 			{
+					console.log(req);
 					var db = require("./db.js");
 					db.db(req.body,function callback(err,result){
 							if (err) {
@@ -46,21 +48,28 @@ var appRouter = function(app) {
                     }); 
                     
 			}
-			else
-			{
-					req.body.SourceCurrency='USD';
+			else 
+			{ 		//if (req.body.Amount === '' && req.body.SourceCurrency ==='') {}
+					var Amount=req.body.Amount || 1.00;
+					req.body.Amount=Amount;
+					var SourceCurrency=req.body.SourceCurrency || 'USD';
+					req.body.SourceCurrency=SourceCurrency;
 					var db = require("./db.js");
 					db.db(req.body,function callback(err,result){
 							if (err) {
-								req.body.err=err;
+								req.body.err=err.message;
 								req.body.returncode=400;
 								var responseToSend=createResponse(result,req.body);
+								console.log(err.message);
 							}
 							else
 							{
 								req.body.err="Success";
 								req.body.returncode=1;
 								var responseToSend=createResponse(result,req.body); 	
+								var JSONresponse=JSON.stringify(responseToSend);
+								 res.setHeader('Content-Type', 'application/json');
+								res.json(responseToSend);
 							}
 							//Function call for response structuring
 							//console.log(result);
@@ -90,7 +99,7 @@ var appRouter = function(app) {
 	output=JSON.parse(output);
 	var Response = {};
 	Response['SourceCurrency']=input.SourceCurrency;
-	var TotalAmount=(1/output[0].conversion_value)*input.Amount;
+	var TotalAmount=parseFloat(parseFloat(1/output[0].conversion_value)*input.Amount);
 	Response['ConversionRate']=(1/output[0].conversion_value).toFixed(2);
 	Response['Amount']=input.Amount;
 	Response['Total']=TotalAmount.toFixed(2);
