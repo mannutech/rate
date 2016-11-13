@@ -13,15 +13,14 @@ db: function db(body, callback){
 	connection.connect(function(err){ if (err) { console.log(err);}});
 		connection.query(query, function(err,rows) {
 			if (err) {
-				console.log(err);
+				return callback(new Error(err));  		
 			}
-
-	  	  //console.log('The solution is: ', rows);
-          //added line
-          connection.end();
-          return callback(rows);  
-	  
-});
+			else 
+			{
+				connection.end();
+          		return callback(null,rows);  		
+			}
+					});
 
 }
 };
