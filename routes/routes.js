@@ -57,7 +57,7 @@ var appRouter = function(app) {
 			if (req.body.SourceCurrency !=='' && req.body.Amount !=='') 
 			{
 				var SourceCurrency=	req.body.SourceCurrency;
-				if()
+				//if(SourceCurrency =='USD' )
 					var db = require("./db.js");
 					db.db(req.body,function callback(err,result){
 							if (err) {
