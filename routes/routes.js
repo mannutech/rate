@@ -23,29 +23,7 @@ var appRouter = function(app) {
 				console.log("Else",response);
 				api.clear();
 				}
-				/*if(typeof(req.apicacheGroup)==="undefined")
-				{
-					req.apicacheGroup=req.body.SourceCurrency;	//intialize cachegroup
-					//console.log(req.apicacheGroup);
-					
-					return true;
-				}
-				else
-				{	
-					if(req.apicacheGroup==req.body.SourceCurrency)
-					{
-						return false;
-					}
-					
-				else
-				{
-					api.clear(req.body.SourceCurrency);	
-					req.apicacheGroup=req.body.SourceCurrency;
-					//var indexing=api.getIndex();
-					//console.log(indexing);
-					return true;
-				}
-				}*/
+				
 			}
 											 
 			
@@ -78,6 +56,8 @@ var appRouter = function(app) {
 			
 			if (req.body.SourceCurrency !=='' && req.body.Amount !=='') 
 			{
+				var SourceCurrency=	req.body.SourceCurrency;
+				if()
 					var db = require("./db.js");
 					db.db(req.body,function callback(err,result){
 							if (err) {

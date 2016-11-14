@@ -8,7 +8,8 @@
     4. Self Signed certificate - Let's encrypt
     5. Runscope account created - Yet to create tests with assertions
     6. Caching the parameter using 'apicache' module.
-    
+    7. To run the app on server use the instructions on this link :
+	by creating a system service .https://www.terlici.com/2015/06/20/running-node-forever.html
 
     
 
