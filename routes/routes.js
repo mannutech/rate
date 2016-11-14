@@ -5,13 +5,13 @@ var appRouter = function(app) {
 	function onlyParameter(req,res)
 			{
 				var response =api.getIndex();
-				
-				var res=response['groups'];//Object.keys(response[1]);
-				console.log(res[0]);
-
-				if(req.body.SourceCurrency!==response.groups[0])
-				{
-						//api.clear(response.groups[0]);	
+				console.log(response);
+				var res= response['groups'];
+				res=Object.keys(res);
+				if(req.body.SourceCurrency!==res[0])
+				{		
+						console.log(req.body.SourceCurrency!==res[0]);
+						api.clear(res[0]);	
 						req.apicacheGroup=req.body.SourceCurrency;
 						return true;
 				}
