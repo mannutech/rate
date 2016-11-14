@@ -5,18 +5,24 @@ var appRouter = function(app) {
 	function onlyParameter(req,res)
 			{
 				var response =api.getIndex();
-				console.log(response);
+				console.log("Index",response);
 				var res= response['groups'];
 				res=Object.keys(res);
 				if(req.body.SourceCurrency!==res[0])
 				{		
-						console.log(req.body.SourceCurrency!==res[0]);
-						api.clear(res[0]);	
+						//api.clear(res[0]);	
+						console.log("before",req.apicacheGroup);
+						//api.newInstance("10 seconds",onlyParameter);
 						req.apicacheGroup=req.body.SourceCurrency;
+						console.log("after",req.apicacheGroup);
 						return true;
 				}
 				else
-					return false;
+				{
+				//	return false;
+				console.log("Else",response);
+				api.clear();
+				}
 				/*if(typeof(req.apicacheGroup)==="undefined")
 				{
 					req.apicacheGroup=req.body.SourceCurrency;	//intialize cachegroup
@@ -43,7 +49,7 @@ var appRouter = function(app) {
 			}
 											 
 			
-	app.post("/api/v0/rate", realcache('10 seconds',onlyParameter),function(req, res) {
+	app.post("/api/v0/rate", realcache('20 seconds',onlyParameter),function(req, res) {
 		
 		if (req.method=='POST') 
 		{
@@ -85,8 +91,7 @@ var appRouter = function(app) {
 								req.body.err="Success";
 								req.body.returncode=1;
 								var responseToSend=createResponse(result,req.body); 	
-								var JSONresponse=JSON.stringify(responseToSend);
-
+								//var JSONresponse=JSON.stringify(responseToSend);
 								 res.setHeader('Content-Type', 'application/json');
 								res.json(responseToSend);
 							}
