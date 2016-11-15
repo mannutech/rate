@@ -1,6 +1,6 @@
 
 App deployed on Amazon EC2 Ubuntu instance .
-Commands used to make Nodejs app work (https://www.terlici.com/2015/06/20/running-node-forever.html):
+Commands used to make Nodejs app work :
 
 pm2 start app.js -i max &     => Main Entry point of App 
 
