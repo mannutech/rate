@@ -5,66 +5,86 @@ var appRouter = function(app) {
 	function onlyParameter(req,res)
 			{
 				var response =api.getIndex();
-				console.log("Index",response);
+				console.log("Get-Index",response);
 				var res= response['groups'];
 				res=Object.keys(res);
-				if(req.body.SourceCurrency!==res[0])
+				req.apicacheGroup=res[0];
+				console.log("req.apicacheGroup =",req.apicacheGroup);				
+				if(req.body.SourceCurrency!==req.apicacheGroup)
 				{		
-						//api.clear(res[0]);	
-						console.log("before",req.apicacheGroup);
-						//api.newInstance("10 seconds",onlyParameter);
+						console.log("req.body.SourceCurrency!==res[0] =>",req.body.SourceCurrency!==res[0]);
+						console.log("Before",req.apicacheGroup);
+						var checkBefore=req.apicacheGroup;
 						req.apicacheGroup=req.body.SourceCurrency;
-						console.log("after",req.apicacheGroup);
-						return true;
+						var checkAfter=req.apicacheGroup;
+						console.log("After",req.apicacheGroup);
+						if(typeof(checkBefore)==='undefined')
+						{
+							return true;
+						}
+						else
+						{
+							if(checkBefore!=checkAfter)
+							{ api.clear(checkBefore);
+								return true;	}
+							else
+							{
+								return false;
+							}
+						}
+						
 				}
 				else
 				{
-				//	return false;
-				console.log("Else",response);
-				api.clear();
+					return true;
+				console.log("ELse Part : req.body.SourceCurrency!==res[0] =>",req.body.SourceCurrency!==res[0]);
+				if(req.apicacheGroup===req.body.SourceCurrency)//req.body.SourceCurrency)
+				{
+					return true;
+				}
+
 				}
 				
-			}
+				}
+				
+			
 											 
 			
 	app.post("/api/v0/rate", realcache('20 seconds',onlyParameter),function(req, res) {
 		
 		if (req.method=='POST') 
 		{
-			/*	if(req.body.SourceCurrency ==='' && req.body.Amount ==='') 
-				{
-					req.body.SourceCurrency ='USD';
-					req.body.Amount	=1.00;				
-				}
-				else if(req.body.SourceCurrency !='' && req.body.Amount =='')
-				{
-					req.body.Amount =1.00;
-				}
-				else if(req.body.SourceCurrency =='' && req.body.Amount !='')
-				{
-					req.body.SourceCurrency = 'USD';	
-				}
-			if(HandleIncomingRequest(req.body))
+			req.apicacheGroup=req.body.SourceCurrency;
+			var SourceCurrency=	req.body.SourceCurrency;
+			if(SourceCurrency !='USD' && SourceCurrency !='GBP' 
+			   &&SourceCurrency !='CAD' &&SourceCurrency !='AUD'
+			   &&SourceCurrency !='SDG' &&SourceCurrency !='EUR'
+			   && SourceCurrency !='')
+					{
+								req.body.SourceCurrency=SourceCurrency;	
+								req.body.err="Not supported Type";
+								//req.body.returncode=400;
+								//var responseToSend=createResponse(null,req.body);
+								//res.json(JSON.stringify(responseToSend));
+								res.status=400;
+								res.setHeader('Content-Type', 'application/json');
+								res.json({err:req.body.err});
+					}
+					else
+					{
+						if (req.body.SourceCurrency !=='' && req.body.Amount !=='') 
 			{
+				
 
-			}
-			
-			if(req.body.SourceCurrency !== 'USD'||'GBP'||'CAD')
-			{
-				res.send(400);
-			}*/
-			
-			if (req.body.SourceCurrency !=='' && req.body.Amount !=='') 
-			{
-				var SourceCurrency=	req.body.SourceCurrency;
-				//if(SourceCurrency =='USD' )
 					var db = require("./db.js");
 					db.db(req.body,function callback(err,result){
 							if (err) {
 								req.body.err=err;
 								req.body.returncode=400;
 								var responseToSend=createResponse(result,req.body);
-								res.json(JSON.stringify(responseToSend));
+								//res.json(JSON.stringify(responseToSend));
+								res.setHeader('Content-Type', 'application/json');
+								res.json(responseToSend);
 							}
 							else
 							{
@@ -72,7 +92,7 @@ var appRouter = function(app) {
 								req.body.returncode=1;
 								var responseToSend=createResponse(result,req.body); 	
 								//var JSONresponse=JSON.stringify(responseToSend);
-								 res.setHeader('Content-Type', 'application/json');
+								res.setHeader('Content-Type', 'application/json');
 								res.json(responseToSend);
 							}
 							//Function call for response structuring
@@ -100,7 +120,6 @@ var appRouter = function(app) {
 								req.body.returncode=1;
 								var responseToSend=createResponse(result,req.body); 	
 								var JSONresponse=JSON.stringify(responseToSend);
-								
 								 res.setHeader('Content-Type', 'application/json');
 								res.json(responseToSend);
 							}
@@ -109,24 +128,7 @@ var appRouter = function(app) {
                     }); 
 
 			}
-	/*		
-	function HandleIncomingRequest(req.body)
-	{	
-		n=req.body.Amount;
-		if(typeof req.body.SourceCurrency !== 'undefined' && typeof req.body.Amount !== 'undefined')
-		{
-			if( !isNaN(parseFloat(n)) && isFinite(n))
-		{
-
-		}
-
-		}
-		
-
-		if (typeof(req.body.SourceCurrency)==='undefined') req.body.SourceCurrency='USD';
-   		if (typeof(req.body.Amount)==='undefined') req.body.Amount=1.0;
-
-	}*/
+					}
 	function createResponse(result,input)
 {
 	var output=JSON.stringify(result);
