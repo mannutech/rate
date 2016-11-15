@@ -9,7 +9,7 @@
 	  password : 'phpmyadmin',
 	  database : 'mannu'
 	});
-	var cronJob = cron.job("*/10 * * * * *", function(){ //0 * * * * *
+	var cronJob = cron.job(" 0,30 * * * *", function(){ //0 * * * * *
     // request to hit another API
     request.get("http://api.fixer.io/latest?base=INR&symbols=USD,GBP,AUD, EUR, CAD, SGD", function(error, response, responsebody) {
 			//console.log(extract);
